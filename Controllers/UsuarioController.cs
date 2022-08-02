@@ -1,4 +1,5 @@
 using ApiBase.Model;
+using ApiBase.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiBase.Controllers
@@ -7,28 +8,54 @@ namespace ApiBase.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private static List<Usuario> Usuarios()
+        private readonly IUsuarioRepository _repository;
+
+        public UsuarioController(IUsuarioRepository repository)
         {
-            return new List<Usuario>{
-                new Usuario{
-                    Id = 1,
-                    Nome = "Geovany",
-                    DataNascimento = new DateTime(1996,10,03)
-                }
-            };
+            _repository = repository;
         }
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(Usuarios());
+            var usuarios = await _repository.BuscaUsuarios();
+            return usuarios.Any()
+                    ? Ok(usuarios)
+                    : NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var usuario = await _repository.BuscaUsuario(id);
+            return usuario != null
+                    ? Ok(usuario)
+                    : NotFound("Usuario não encontrado");
         }
 
         [HttpPost]
-        public IActionResult Post(Usuario usuario)
+        public async Task<IActionResult> Post(Usuario usuario)
         {
-            var usuarios = Usuarios();
-            usuarios.Add(usuario);
-            return Ok(usuarios);
+            _repository.AdicionaUsuario(usuario);
+            return await _repository.SaveChangesAsync()
+                    ? Ok("Usuario Adicionado com sucesso")
+                    : BadRequest("Erro ao salvar usuario");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Usuario usuario)
+        {
+            var usuarioBanco = await _repository.BuscaUsuario(id);
+            if (usuarioBanco == null) return NotFound("Usuario não encontrado");
+
+            usuarioBanco.Nome = usuario.Nome ?? usuarioBanco.Nome;
+            usuarioBanco.DataNascimento = usuario.DataNascimento != new DateTime()
+            ? usuario.DataNascimento : usuarioBanco.DataNascimento;
+
+            _repository.AtualizaUsuario(usuarioBanco);
+
+            return await _repository.SaveChangesAsync()
+                            ? Ok("Usuario Atualizado com sucesso")
+                            : BadRequest("Erro ao atualizar usuario");
         }
     }
 }

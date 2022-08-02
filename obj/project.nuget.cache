@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "loaxCLIEx0qMTpMYsFwDQAfL8ZsfCFDoeXM+2mYMoki6pldvR7MQTcBefZABsMN7gX8zWHORzWK2o3kNcNgWlg==",
+  "dgSpecHash": "BRs0oraauqmtgPdmH+dCbjUdCIlMcpV8dBRvyPu9qCAEHgxFrRGakATpkJQUdbs9e0YjDNqj7qMCECqUoPuFzQ==",
   "success": true,
-  "projectFilePath": "c:\\ProjetosP\\ApiBase\\ApiBase.csproj",
+  "projectFilePath": "C:\\ProjetosP\\ApiBase\\ApiBase.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Fartec\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Fartec\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.7\\microsoft.entityframeworkcore.6.0.7.nupkg.sha512",
